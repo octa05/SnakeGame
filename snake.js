@@ -98,6 +98,42 @@ function changeDirection(e) {
     }
 }
 
+// handle touch
+var touchStartX = 0;
+var touchStartY = 0;
+
+function handleTouchStart(event) {
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+}
+
+function handleTouchEnd(event) {
+    var touchEndX = event.changedTouches[0].clientX;
+    var touchEndY = event.changedTouches[0].clientY;
+
+    var diffX = touchEndX - touchStartX;
+    var diffY = touchEndY - touchStartY;
+
+    // Tentukan arah berdasarkan gesekan
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 0 && velocityX !== -1) { // Geser ke kanan
+            velocityX = 1;
+            velocityY = 0;
+        } else if (diffX < 0 && velocityX !== 1) { // Geser ke kiri
+            velocityX = -1;
+            velocityY = 0;
+        }
+    } else {
+        if (diffY > 0 && velocityY !== -1) { // Geser ke bawah
+            velocityX = 0;
+            velocityY = 1;
+        } else if (diffY < 0 && velocityY !== 1) { // Geser ke atas
+            velocityX = 0;
+            velocityY = -1;
+        }
+    }
+}
+
 function placeFood() {
     //0-1) *cols -> (0-19.9999) -> (0-19) * 25
     foodX = Math.floor(Math.random() * cols) * blockSize;
